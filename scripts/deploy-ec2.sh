@@ -37,7 +37,11 @@ if ! command -v docker >/dev/null 2>&1; then
   exit 1
 fi
 
-docker pull ${IMAGE_NAME}
+if ! docker pull ${IMAGE_NAME}; then
+  echo "Failed to pull image: ${IMAGE_NAME}"
+  echo "Verify image exists and is accessible (public or authenticated registry)."
+  exit 1
+fi
 
 docker rm -f ${APP_CONTAINER} >/dev/null 2>&1 || true
 

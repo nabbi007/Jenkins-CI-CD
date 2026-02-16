@@ -13,6 +13,7 @@ INSTANCE_NAME="${INSTANCE_NAME:-jenkins-cicd-t3micro}"
 INSTANCE_TYPE="${INSTANCE_TYPE:-t3.micro}"
 KEY_NAME="${KEY_NAME:-jenkins}"
 KEY_PATH="${KEY_PATH:-/tmp/${KEY_NAME}.pem}"
+REGISTRY_REPO="${REGISTRY_REPO:-${DOCKERHUB_USERNAME:-nabbi007}/jenkins-ci-cd-demo}"
 VPC_ID="${VPC_ID:-}"
 SUBNET_ID="${SUBNET_ID:-}"
 SSH_CIDR="${SSH_CIDR:-0.0.0.0/0}"
@@ -257,7 +258,7 @@ EC2_INSTANCE_ID=${INSTANCE_ID}
 EC2_HOST=${PUBLIC_DNS}
 EC2_PUBLIC_IP=${PUBLIC_IP}
 EC2_USER=ec2-user
-REGISTRY_REPO=nabbi007/jenkins-ci-cd-demo
+REGISTRY_REPO=${REGISTRY_REPO}
 HOST_PORT=80
 HEALTH_PATH=/health
 SSH_KEY_PATH=${KEY_PATH}
@@ -289,7 +290,7 @@ Provisioned/Reused successfully:
 Jenkins build parameters:
   EC2_HOST=${PUBLIC_DNS}
   EC2_USER=ec2-user
-  REGISTRY_REPO=nabbi007/jenkins-ci-cd-demo
+  REGISTRY_REPO=${REGISTRY_REPO}
   HOST_PORT=80
   HEALTH_PATH=/health
 
