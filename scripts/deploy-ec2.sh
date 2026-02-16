@@ -11,7 +11,10 @@ fi
 
 : "${EC2_HOST:?EC2_HOST is required}"
 : "${EC2_USER:?EC2_USER is required}"
-: "${IMAGE_NAME:?IMAGE_NAME is required}"
+if [[ -z "${IMAGE_NAME:-}" && -n "${REGISTRY_REPO:-}" ]]; then
+  IMAGE_NAME="${REGISTRY_REPO}:latest"
+fi
+: "${IMAGE_NAME:?IMAGE_NAME is required (set IMAGE_NAME or REGISTRY_REPO)}"
 
 APP_CONTAINER="${APP_CONTAINER:-jenkins-ci-cd-app}"
 HOST_PORT="${HOST_PORT:-80}"
