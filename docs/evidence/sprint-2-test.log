@@ -1,0 +1,36 @@
+
+> jenkins-ci-cd@1.0.0 test
+> jest --runInBand
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/","statusCode":200,"durationMs":0.57}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/health","statusCode":200,"durationMs":0.22}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/metrics","statusCode":200,"durationMs":0.24}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/does-not-exist","statusCode":404,"durationMs":0.29}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+PASS test/app.test.js
+  Express service
+    ✓ returns metadata on GET / (28 ms)
+    ✓ returns healthy status data on GET /health (5 ms)
+    ✓ returns metrics on GET /metrics (5 ms)
+    ✓ returns 404 on unknown routes (6 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        0.397 s, estimated 1 s
+Ran all test suites.
