@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
 IMAGE_NAME="${IMAGE_NAME:-jenkins-ci-cd-demo:verify-local}"
 CONTAINER_NAME="${CONTAINER_NAME:-verify-local-check}"
 HOST_PORT="${HOST_PORT:-3010}"
+
+cd "${REPO_ROOT}"
+
+if [[ ! -f Dockerfile ]]; then
+  echo "Dockerfile not found in ${REPO_ROOT}"
+  exit 1
+fi
 
 npm ci
 npm test
