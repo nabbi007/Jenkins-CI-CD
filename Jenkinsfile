@@ -10,6 +10,7 @@ pipeline {
     string(name: 'EC2_USER', defaultValue: 'ec2-user', description: 'SSH username')
     string(name: 'REGISTRY_REPO', defaultValue: 'nabbi007/jenkins-ci-cd-demo', description: 'Image repo path')
     string(name: 'HOST_PORT', defaultValue: '80', description: 'Port exposed on EC2 host')
+    string(name: 'HEALTH_PATH', defaultValue: '/health', description: 'Health endpoint path for deployment verification')
   }
 
   environment {
@@ -67,6 +68,7 @@ pipeline {
             EC2_HOST=${params.EC2_HOST} \
             EC2_USER=${params.EC2_USER} \
             HOST_PORT=${params.HOST_PORT} \
+            HEALTH_PATH=${params.HEALTH_PATH} \
             ./scripts/deploy-ec2.sh
           '''
         }
