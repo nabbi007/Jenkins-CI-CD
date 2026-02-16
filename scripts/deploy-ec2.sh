@@ -16,15 +16,31 @@ if [[ -z "${IMAGE_NAME:-}" && -n "${REGISTRY_REPO:-}" ]]; then
 fi
 : "${IMAGE_NAME:?IMAGE_NAME is required (set IMAGE_NAME or REGISTRY_REPO)}"
 
+if [[ -z "${ECR_REGISTRY:-}" && "${IMAGE_NAME}" == *.amazonaws.com/* ]]; then
+  ECR_REGISTRY="${IMAGE_NAME%%/*}"
+fi
+
+if [[ -z "${AWS_REGION:-}" && -n "${ECR_REGISTRY:-}" ]]; then
+  AWS_REGION="$(awk -F'.' '{print $4}' <<< "${ECR_REGISTRY}")"
+fi
+
+if [[ -n "${ECR_REGISTRY:-}" && -z "${AWS_REGION:-}" ]]; then
+  echo "Unable to derive AWS_REGION for ECR login. Set AWS_REGION explicitly."
+  exit 1
+fi
+
 APP_CONTAINER="${APP_CONTAINER:-jenkins-ci-cd-app}"
 HOST_PORT="${HOST_PORT:-80}"
 CONTAINER_PORT="3000"
 HEALTH_PATH="${HEALTH_PATH:-/health}"
 
-SSH_CMD=(ssh -o StrictHostKeyChecking=no)
+SSH_CMD=(ssh -T -o StrictHostKeyChecking=no)
 if [[ -n "${SSH_KEY_PATH:-}" ]]; then
   : "${SSH_KEY_PATH:?SSH_KEY_PATH is set but empty}"
-  [[ -f "${SSH_KEY_PATH}" ]] || { echo "SSH key file not found: ${SSH_KEY_PATH}"; exit 1; }
+  [[ -f "${SSH_KEY_PATH}" ]] || {
+    echo "SSH key file not found: ${SSH_KEY_PATH}"
+    exit 1
+  }
   chmod 400 "${SSH_KEY_PATH}" >/dev/null 2>&1 || true
   SSH_CMD+=(-i "${SSH_KEY_PATH}")
 fi
@@ -37,9 +53,24 @@ if ! command -v docker >/dev/null 2>&1; then
   exit 1
 fi
 
+if [[ "${ECR_REGISTRY:-}" == *.amazonaws.com ]]; then
+  if ! command -v aws >/dev/null 2>&1; then
+    echo "AWS CLI is not installed on target host"
+    exit 1
+  fi
+
+  if ! aws sts get-caller-identity >/dev/null 2>&1; then
+    echo "AWS credentials are unavailable on EC2."
+    echo "Attach an IAM role with ECR read permissions (e.g., AmazonEC2ContainerRegistryReadOnly)."
+    exit 1
+  fi
+
+  aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+fi
+
 if ! docker pull ${IMAGE_NAME}; then
   echo "Failed to pull image: ${IMAGE_NAME}"
-  echo "Verify image exists and is accessible (public or authenticated registry)."
+  echo "Verify image exists and is accessible in ECR."
   exit 1
 fi
 

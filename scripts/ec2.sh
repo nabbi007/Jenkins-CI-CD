@@ -13,7 +13,10 @@ INSTANCE_NAME="${INSTANCE_NAME:-jenkins-cicd-t3micro}"
 INSTANCE_TYPE="${INSTANCE_TYPE:-t3.micro}"
 KEY_NAME="${KEY_NAME:-jenkins}"
 KEY_PATH="${KEY_PATH:-/tmp/${KEY_NAME}.pem}"
-REGISTRY_REPO="${REGISTRY_REPO:-${DOCKERHUB_USERNAME:-nabbi007}/jenkins-ci-cd-demo}"
+ECR_REPOSITORY="${ECR_REPOSITORY:-jenkins-ci-cd-demo}"
+REGISTRY_REPO="${REGISTRY_REPO:-}"
+AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID:-}"
+ECR_REGISTRY="${ECR_REGISTRY:-}"
 VPC_ID="${VPC_ID:-}"
 SUBNET_ID="${SUBNET_ID:-}"
 SSH_CIDR="${SSH_CIDR:-0.0.0.0/0}"
@@ -45,6 +48,20 @@ aws_ec2() {
 validate_aws_auth() {
   if ! aws "${PROFILE_ARG[@]}" sts get-caller-identity >/dev/null 2>&1; then
     fatal "AWS credentials not found. Run 'aws login' or 'aws configure' and retry."
+  fi
+}
+
+resolve_ecr_defaults() {
+  if [[ -z "${AWS_ACCOUNT_ID}" ]]; then
+    AWS_ACCOUNT_ID="$(aws "${PROFILE_ARG[@]}" sts get-caller-identity --query Account --output text)"
+  fi
+
+  if [[ -z "${ECR_REGISTRY}" ]]; then
+    ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
+  fi
+
+  if [[ -z "${REGISTRY_REPO}" ]]; then
+    REGISTRY_REPO="${ECR_REGISTRY}/${ECR_REPOSITORY}"
   fi
 }
 
@@ -258,6 +275,10 @@ EC2_INSTANCE_ID=${INSTANCE_ID}
 EC2_HOST=${PUBLIC_DNS}
 EC2_PUBLIC_IP=${PUBLIC_IP}
 EC2_USER=ec2-user
+AWS_REGION=${REGION}
+AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
+ECR_REGISTRY=${ECR_REGISTRY}
+ECR_REPOSITORY=${ECR_REPOSITORY}
 REGISTRY_REPO=${REGISTRY_REPO}
 HOST_PORT=80
 HEALTH_PATH=/health
@@ -268,6 +289,7 @@ EOF
 
 main() {
   validate_aws_auth
+  resolve_ecr_defaults
   ensure_key_pair
   resolve_network_defaults
   ensure_security_group
@@ -290,6 +312,8 @@ Provisioned/Reused successfully:
 Jenkins build parameters:
   EC2_HOST=${PUBLIC_DNS}
   EC2_USER=ec2-user
+  AWS_REGION=${REGION}
+  ECR_REPOSITORY=${ECR_REPOSITORY}
   REGISTRY_REPO=${REGISTRY_REPO}
   HOST_PORT=80
   HEALTH_PATH=/health
@@ -299,6 +323,7 @@ Jenkins SSH credential:
 
 Quick checks:
   ssh -i ${KEY_PATH} ec2-user@${PUBLIC_DNS} "docker --version"
+  ssh -i ${KEY_PATH} ec2-user@${PUBLIC_DNS} "aws sts get-caller-identity"
   curl http://${PUBLIC_DNS}/health
 EOF
 }
