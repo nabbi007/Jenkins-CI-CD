@@ -2,11 +2,12 @@
 set -euo pipefail
 
 # Provisions an Amazon Linux 2 t3.micro instance for Jenkins deployment target use.
-# Requires: aws cli configured, EC2 key pair already created.
+# Requires: aws cli configured.
 
-REGION="${REGION:-us-east-1}"
+REGION="${REGION:-eu-west-1}"
 INSTANCE_NAME="${INSTANCE_NAME:-jenkins-cicd-t3micro}"
-KEY_NAME="${KEY_NAME:-}"
+KEY_NAME="${KEY_NAME:-jenkins}"
+KEY_PATH="${KEY_PATH:-/tmp/${KEY_NAME}.pem}"
 VPC_ID="${VPC_ID:-}"
 SUBNET_ID="${SUBNET_ID:-}"
 SSH_CIDR="${SSH_CIDR:-0.0.0.0/0}"
@@ -17,16 +18,27 @@ if [[ -n "${AWS_PROFILE:-}" ]]; then
   PROFILE_ARG+=(--profile "${AWS_PROFILE}")
 fi
 
-if [[ -z "${KEY_NAME}" ]]; then
-  echo "Missing required environment variables."
-  echo "Required: KEY_NAME"
-  echo
-  echo "Example:"
-  echo "KEY_NAME=my-key REGION=eu-west-1 bash scripts/ec2.sh"
-  echo
-  echo "Optional overrides:"
-  echo "  VPC_ID=<vpc-id> SUBNET_ID=<subnet-id>"
-  exit 1
+if aws "${PROFILE_ARG[@]}" ec2 describe-key-pairs \
+  --region "${REGION}" \
+  --key-names "${KEY_NAME}" >/dev/null 2>&1; then
+  echo "Using existing key pair: ${KEY_NAME}"
+  if [[ ! -f "${KEY_PATH}" ]]; then
+    echo "Private key file not found at ${KEY_PATH}."
+    echo "Set KEY_PATH to your existing .pem file location."
+    echo "Example: KEY_PATH=$HOME/.ssh/${KEY_NAME}.pem ./ec2.sh"
+    exit 1
+  fi
+  chmod 400 "${KEY_PATH}" >/dev/null 2>&1 || true
+else
+  echo "Key pair ${KEY_NAME} not found in ${REGION}. Creating it..."
+  mkdir -p "$(dirname "${KEY_PATH}")"
+  aws "${PROFILE_ARG[@]}" ec2 create-key-pair \
+    --region "${REGION}" \
+    --key-name "${KEY_NAME}" \
+    --query 'KeyMaterial' \
+    --output text > "${KEY_PATH}"
+  chmod 400 "${KEY_PATH}"
+  echo "Private key written to: ${KEY_PATH}"
 fi
 
 if [[ -z "${VPC_ID}" ]]; then
@@ -147,4 +159,4 @@ echo "  REGISTRY_REPO=nabbi007/jenkins-ci-cd-demo"
 echo "  HOST_PORT=80"
 echo "  HEALTH_PATH=/health"
 echo
-echo "Important: Set Jenkins SSH credential 'ec2_ssh' to the private key for KEY_NAME=${KEY_NAME}."
+echo "Important: Set Jenkins SSH credential 'ec2_ssh' using private key file: ${KEY_PATH}"
