@@ -20,6 +20,7 @@
 
 - Pipeline config: `Jenkinsfile`
 - Real run execution guide: `docs/jenkins-real-run-steps.md`
+- EC2 t3.micro provisioning helper: `scripts/provision-t3-micro.sh`
 - Successful pipeline evidence: `docs/evidence/sprint-1-pipeline-success-simulated.log`, `docs/evidence/sprint-2-pipeline-success-simulated.log`
 - Failed pipeline evidence: `docs/evidence/sprint-1-pipeline-failure-simulated.log`
 

@@ -63,6 +63,29 @@ Ensure security group inbound rules allow:
 - `22/tcp` from Jenkins host IP
 - `80/tcp` from the client IP range you will use for verification
 
+### Option A: Provision a New `t3.micro` Automatically (Recommended)
+
+Use the helper script in this repo:
+
+```bash
+KEY_NAME=<your-ec2-keypair-name> \
+VPC_ID=<your-vpc-id> \
+SUBNET_ID=<your-public-subnet-id> \
+REGION=us-east-1 \
+bash scripts/provision-t3-micro.sh
+```
+
+This creates:
+- Amazon Linux 2 `t3.micro`
+- Security group with `22` and `80` ingress
+- Docker preinstalled via user-data
+
+The script prints the exact Jenkins values for `EC2_HOST` and the rest of the deploy parameters.
+
+### Option B: Use an Existing EC2 Instance
+
+If you already have a running host, keep using it and ensure Docker + security rules are configured as above.
+
 ## 5. Create Jenkins Pipeline Job
 
 1. `New Item` -> `Pipeline` -> name: `jenkins-ci-cd-real-run`
