@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "echo \"No tests configured yet\" && exit 1"
+    "test": "jest --runInBand"
   },
   "keywords": [
     "jenkins",
@@ -16,5 +16,9 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "node-mocks-http": "^1.17.2"
   }
 }
