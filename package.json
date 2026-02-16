@@ -1,0 +1,24 @@
+{
+  "name": "jenkins-ci-cd",
+  "version": "1.0.0",
+  "description": "Simple task service delivered through a Jenkins CI/CD pipeline",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest --runInBand"
+  },
+  "keywords": [
+    "jenkins",
+    "cicd",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "node-mocks-http": "^1.17.2"
+  }
+}
