@@ -1,0 +1,112 @@
+
+> jenkins-ci-cd@1.0.0 verify:local
+> bash scripts/verify-local.sh
+
+npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm WARN deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+
+added 337 packages, and audited 338 packages in 3s
+
+46 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+> jenkins-ci-cd@1.0.0 test
+> jest --runInBand
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/","statusCode":200,"durationMs":0.44}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/health","statusCode":200,"durationMs":0.18}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/metrics","statusCode":200,"durationMs":0.16}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+  console.log
+    {"level":"info","event":"http_request","method":"GET","path":"/does-not-exist","statusCode":404,"durationMs":0.22}
+
+      at ServerResponse.log (src/app.js:22:13)
+
+PASS test/app.test.js
+  Express service
+    ✓ returns metadata on GET / (31 ms)
+    ✓ returns healthy status data on GET /health (4 ms)
+    ✓ returns metrics on GET /metrics (4 ms)
+    ✓ returns 404 on unknown routes (5 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        0.385 s, estimated 1 s
+Ran all test suites.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 183B done
+#1 DONE 0.0s
+
+#2 [auth] library/node:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:18-alpine
+#3 DONE 1.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 102B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 156.65kB 0.0s done
+#5 DONE 0.1s
+
+#6 [1/5] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+#6 resolve docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+#6 resolve docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e 0.1s done
+#6 DONE 0.1s
+
+#7 [2/5] WORKDIR /app
+#7 CACHED
+
+#8 [3/5] COPY package*.json ./
+#8 DONE 0.1s
+
+#9 [4/5] RUN npm ci --omit=dev
+#9 2.985 
+#9 2.985 added 68 packages, and audited 69 packages in 2s
+#9 2.985 
+#9 2.985 15 packages are looking for funding
+#9 2.985   run `npm fund` for details
+#9 2.986 
+#9 2.986 found 0 vulnerabilities
+#9 2.988 npm notice
+#9 2.988 npm notice New major version of npm available! 10.8.2 -> 11.10.0
+#9 2.988 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.10.0
+#9 2.988 npm notice To update run: npm install -g npm@11.10.0
+#9 2.988 npm notice
+#9 DONE 3.0s
+
+#10 [5/5] COPY src ./src
+#10 DONE 0.1s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 0.3s done
+#11 exporting manifest sha256:b63a7edce691b171b323cc378181189d278ba75509126f94ca91a96425a6e52e 0.0s done
+#11 exporting config sha256:4ff08155a7b6310bbc14e00b01529275d790d82759ac377bd2af92568114431e 0.0s done
+#11 exporting attestation manifest sha256:dd96bf77b192bbf417273dbd4a873ffc4b48d3f04fcfec83b9b67103ae7e4dd6 0.1s done
+#11 exporting manifest list sha256:7b770747901be42115b1d9bcada33792f0aaf5c709245c1ed8048927037172d6
+#11 exporting manifest list sha256:7b770747901be42115b1d9bcada33792f0aaf5c709245c1ed8048927037172d6 0.0s done
+#11 naming to docker.io/library/jenkins-ci-cd-demo:verify-local done
+#11 unpacking to docker.io/library/jenkins-ci-cd-demo:verify-local
+#11 unpacking to docker.io/library/jenkins-ci-cd-demo:verify-local 0.3s done
+#11 DONE 0.9s
+curl: (56) Recv failure: Connection reset by peer
+Local verification passed on attempt 2.
