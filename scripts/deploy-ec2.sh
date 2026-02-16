@@ -10,7 +10,15 @@ HOST_PORT="${HOST_PORT:-80}"
 CONTAINER_PORT="3000"
 HEALTH_PATH="${HEALTH_PATH:-/health}"
 
-ssh -o StrictHostKeyChecking=no "${EC2_USER}@${EC2_HOST}" <<REMOTE
+SSH_CMD=(ssh -o StrictHostKeyChecking=no)
+if [[ -n "${SSH_KEY_PATH:-}" ]]; then
+  : "${SSH_KEY_PATH:?SSH_KEY_PATH is set but empty}"
+  [[ -f "${SSH_KEY_PATH}" ]] || { echo "SSH key file not found: ${SSH_KEY_PATH}"; exit 1; }
+  chmod 400 "${SSH_KEY_PATH}" >/dev/null 2>&1 || true
+  SSH_CMD+=(-i "${SSH_KEY_PATH}")
+fi
+
+"${SSH_CMD[@]}" "${EC2_USER}@${EC2_HOST}" <<REMOTE
 set -euo pipefail
 
 if ! command -v docker >/dev/null 2>&1; then
