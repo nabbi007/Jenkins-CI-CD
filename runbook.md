@@ -50,6 +50,7 @@ Reconnect SSH after adding the user to docker group.
    - `EC2_USER` = `ec2-user`
    - `REGISTRY_REPO` = e.g. `nabbi007/jenkins-ci-cd-demo`
    - `HOST_PORT` = `80`
+   - `HEALTH_PATH` = `/health`
 
 ## 6. Pipeline Stage Behavior
 
@@ -58,9 +59,19 @@ Reconnect SSH after adding the user to docker group.
 3. Test: `npm test`
 4. Docker Build: Build and tag image (`BUILD_NUMBER` and `latest`).
 5. Push Image: Authenticate using `registry_creds`, push both tags.
-6. Deploy: SSH via `ec2_ssh`, pull image, replace container, prune old images.
+6. Deploy: SSH via `ec2_ssh`, pull image, replace container, prune residual containers/images, and verify health endpoint.
 
-## 7. Verification
+## 7. Local Verification Before Merge
+
+Run the reusable verification script locally:
+
+```bash
+npm run verify:local
+```
+
+This performs `npm ci`, test execution, Docker build, container smoke check on `/health`, and cleanup.
+
+## 8. Verification After Deploy
 
 After a successful run:
 
@@ -69,13 +80,15 @@ After a successful run:
 
 ```bash
 curl http://<EC2_PUBLIC_DNS_OR_IP>/
+curl http://<EC2_PUBLIC_DNS_OR_IP>/health
 ```
 
-3. Expected response JSON includes `service`, `version`, and `status`.
+3. Expected `/` response includes `service`, `version`, and `status`.
+4. Expected `/health` response includes `status`, `uptimeSeconds`, and `timestamp`.
 
-## 8. Failure Triage
+## 9. Failure Triage
 
 - Test failures: check `test/app.test.js` and app route behavior.
 - Docker build failures: validate `Dockerfile` and build context.
 - Push failures: verify `registry_creds` username/token permissions.
-- Deploy failures: verify `ec2_ssh` key, EC2 firewall, Docker service on host.
+- Deploy failures: verify `ec2_ssh` key, EC2 firewall, Docker service on host, and health endpoint responsiveness.

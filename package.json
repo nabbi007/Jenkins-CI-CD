@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "verify:local": "bash scripts/verify-local.sh"
   },
   "keywords": [
     "jenkins",
