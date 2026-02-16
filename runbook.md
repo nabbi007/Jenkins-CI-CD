@@ -29,6 +29,16 @@ Create these credentials in Jenkins:
 
 ## 4. EC2 Host Preparation
 
+Fastest setup (one command):
+
+```bash
+bash scripts/ec2.sh
+```
+
+This reuses or creates a `t3.micro` host in `eu-west-1`, creates key pair `jenkins` when missing, and prints Jenkins parameter values.
+
+Manual setup path (if needed):
+
 Run once on EC2:
 
 ```bash

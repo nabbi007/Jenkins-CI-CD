@@ -68,19 +68,24 @@ Ensure security group inbound rules allow:
 Use the helper script in this repo:
 
 ```bash
-KEY_NAME=<your-ec2-keypair-name> \
-VPC_ID=<your-vpc-id> \
-SUBNET_ID=<your-public-subnet-id> \
-REGION=us-east-1 \
-bash scripts/provision-t3-micro.sh
+bash scripts/ec2.sh
 ```
 
 This creates:
 - Amazon Linux 2 `t3.micro`
 - Security group with `22` and `80` ingress
 - Docker preinstalled via user-data
+- Key pair `jenkins` in `eu-west-1` when missing
 
 The script prints the exact Jenkins values for `EC2_HOST` and the rest of the deploy parameters.
+
+Useful overrides if needed:
+
+```bash
+REGION=eu-west-1 KEY_NAME=jenkins bash scripts/ec2.sh
+KEY_PATH=$HOME/.ssh/jenkins.pem bash scripts/ec2.sh
+SKIP_STATUS_WAIT=true bash scripts/ec2.sh
+```
 
 ### Option B: Use an Existing EC2 Instance
 
