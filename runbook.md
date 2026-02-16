@@ -27,20 +27,28 @@ Create these credentials in Jenkins:
 2. `ec2_ssh` (SSH private key): key used for `ec2-user` login
 3. `git_credentials` (optional): only if repo access needs auth
 
-## 4. Provision/Re-use EC2 Quickly
+## 4. Provision/Re-use EC2 Quickly (Terraform)
 
 ```bash
 bash scripts/ec2.sh
 ```
 
 This script:
-- reuses or creates a `t3.micro` in `eu-west-1`
-- resolves default VPC/subnet
-- creates key pair `jenkins` if missing
-- writes env output to `/tmp/jenkins-ec2.env`
+- runs Terraform in `infra/terraform`
+- creates/updates EC2, SG, key pair, IAM role/profile, and ECR repository
+- preserves state so repeated `apply` runs do not recreate resources unnecessarily
+- writes env output to `/tmp/jenkins-ec2.env` for deploy scripts
+
+Useful commands:
+
+```bash
+bash scripts/ec2.sh plan
+bash scripts/ec2.sh apply
+bash scripts/ec2.sh destroy
+```
 
 Important for ECR pull:
-- EC2 must have AWS credentials available (best: IAM role with `AmazonEC2ContainerRegistryReadOnly`).
+- The Terraform module attaches `AmazonEC2ContainerRegistryReadOnly` to EC2 via instance profile.
 
 ## 5. Jenkins Job Setup
 

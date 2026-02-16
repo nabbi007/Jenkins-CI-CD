@@ -17,7 +17,7 @@
 - `ec2_ssh` (SSH private key for EC2)
 - `git_credentials` (optional)
 
-## 3. Provision EC2 (fastest)
+## 3. Provision EC2 (fastest, Terraform-backed)
 
 ```bash
 bash scripts/ec2.sh
@@ -30,7 +30,15 @@ Outputs are saved to `/tmp/jenkins-ec2.env` with:
 - `ECR_REPOSITORY`
 - `REGISTRY_REPO`
 
-For ECR pulls to work, EC2 should have IAM role `AmazonEC2ContainerRegistryReadOnly` (recommended).
+The Terraform module configures EC2 with an IAM instance profile for ECR read access.
+
+Useful variants:
+
+```bash
+bash scripts/ec2.sh plan
+bash scripts/ec2.sh apply
+bash scripts/ec2.sh destroy
+```
 
 ## 4. Jenkins Job Setup
 
