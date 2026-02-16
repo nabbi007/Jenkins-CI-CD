@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+ENV_FILE="${ENV_FILE:-/tmp/jenkins-ec2.env}"
+if [[ -f "${ENV_FILE}" ]]; then
+  set -a
+  # shellcheck source=/tmp/jenkins-ec2.env
+  source "${ENV_FILE}"
+  set +a
+fi
+
 : "${EC2_HOST:?EC2_HOST is required}"
 : "${EC2_USER:?EC2_USER is required}"
 : "${IMAGE_NAME:?IMAGE_NAME is required}"
