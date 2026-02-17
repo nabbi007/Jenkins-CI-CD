@@ -7,45 +7,76 @@
 
 ---
 
-## Grading Compliance Summary
+## Grading Compliance
 
-| Dimension | Weight | Status | Evidence |
-|-----------|--------|--------|----------|
-| Agile Practice | 25% | ✅ | Backlog, AC, Sprint Plans |
-| DevOps Practice | 25% | ✅ | Jenkins Pipeline, Tests |
-| Delivery Discipline | 20% | ✅ | 65 incremental commits |
-| Prototype Quality | 20% | ✅ | Live app, 10/10 tests |
-| Reflection | 10% | ✅ | Retrospectives |
-
----
-
-## 1. Agile Practice (25%)
-
-### 1.1 Product Backlog
-
-**8 User Stories** with consistent acceptance criteria:
-
-| ID | Story | Points | Priority |
-|----|-------|--------|----------|
-| US-01 | Express API Foundation | 3 | High |
-| US-02 | Automated Testing | 5 | High |
-| US-03 | Docker Containerization | 3 | High |
-| US-04 | Jenkins CI/CD Pipeline | 8 | High |
-| US-05 | EC2 Deployment | 5 | High |
-| US-06 | Logging & Monitoring | 3 | Medium |
-| US-07 | Web UI Dashboard | 5 | Medium |
-| US-08 | Verification Scripts | 3 | Medium |
-
-**Total:** 35 Story Points
+| Dimension | Weight | Evidence |
+|-----------|--------|----------|
+| Agile Practice | 25% | Backlog (8 stories), Acceptance Criteria, Sprint Plans |
+| DevOps Practice | 25% | Jenkins Pipeline (7 stages), 10 Tests, Monitoring |
+| Delivery Discipline | 20% | 65 incremental commits, Feature branches |
+| Prototype Quality | 20% | Live app at 54.74.21.91, 10/10 tests passing |
+| Reflection | 10% | Retrospectives with improvements applied |
 
 ---
 
-### 1.2 User Stories (Full Format)
+## Product Vision
 
-#### US-01: Express API Foundation
+**DevOps Release Tracker** — A web application for tracking deployments, managing release state, and monitoring health in CI/CD pipelines.
+
+**Target Users:** DevOps engineers, release managers, platform teams
+
+---
+
+## Branching Strategy
+
+The project uses a coordinated branching strategy:
+
+```
+main                          ← Production-ready code
+├── sprint-0/planning         ← Sprint 0: Backlog & setup
+├── sprint-1/execution        ← Sprint 1: Core delivery
+├── sprint-2/execution        ← Sprint 2: Advanced features
+│
+├── feature/us01-express-foundation    ← US-01 work
+├── feature/us02-tests                 ← US-02 work
+├── feature/us03-dockerize-service     ← US-03 work
+├── feature/us04-jenkins-pipeline      ← US-04 work
+├── feature/us05-us07-delivery-hardening ← US-05, US-07 work
+└── feature/us06-observability         ← US-06 work
+```
+
+**Flow:** Feature branches → Sprint branch → Main
+
+---
+
+## Product Backlog
+
+| ID | User Story | Points | Priority |
+|----|------------|--------|----------|
+| US-01 | Express API Foundation | 3 | 8 (Must) |
+| US-02 | Automated Testing | 5 | 8 (Must) |
+| US-03 | Docker Containerization | 3 | 8 (Must) |
+| US-04 | Jenkins CI/CD Pipeline | 8 | 8 (Must) |
+| US-05 | EC2 Deployment | 5 | 5 (Should) |
+| US-06 | Logging & Monitoring | 3 | 3 (Could) |
+| US-07 | Web UI Dashboard | 5 | 3 (Could) |
+| US-08 | Verification Scripts | 3 | 2 (Nice) |
+
+**Total:** 35 Story Points  
+**Priority Scale:** Fibonacci (1, 2, 3, 5, 8, 13)
+
+---
+
+## User Stories
+
+### US-01: Express API Foundation
 **As a** developer  
 **I want** a minimal Express service  
 **So that** I have a deployable web API
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 3 | 8 | Sprint 1 |
 
 **Acceptance Criteria:**
 - [ ] GET / returns 200 with JSON metadata
@@ -53,14 +84,16 @@
 - [ ] App starts with `npm start`
 - [ ] Health endpoint returns status
 
-**Status:** ✅ Done (Sprint 1)
-
 ---
 
-#### US-02: Automated Testing
+### US-02: Automated Testing
 **As a** developer  
 **I want** unit and integration tests  
 **So that** regressions are caught early
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 5 | 8 | Sprint 1 |
 
 **Acceptance Criteria:**
 - [ ] `npm test` runs Jest suite
@@ -68,14 +101,16 @@
 - [ ] Tests exit non-zero on failure
 - [ ] Tests run automatically in CI
 
-**Status:** ✅ Done (Sprint 1)
-
 ---
 
-#### US-03: Docker Containerization
+### US-03: Docker Containerization
 **As a** DevOps engineer  
 **I want** Docker image builds  
 **So that** deployments are consistent
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 3 | 8 | Sprint 1 |
 
 **Acceptance Criteria:**
 - [ ] Dockerfile exists
@@ -83,14 +118,16 @@
 - [ ] Container exposes app port
 - [ ] Alpine base for small image
 
-**Status:** ✅ Done (Sprint 1)
-
 ---
 
-#### US-04: Jenkins CI/CD Pipeline
+### US-04: Jenkins CI/CD Pipeline
 **As a** DevOps engineer  
 **I want** an automated pipeline  
 **So that** delivery is reproducible
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 8 | 8 | Sprint 1 |
 
 **Acceptance Criteria:**
 - [ ] Jenkinsfile with 7 stages
@@ -99,14 +136,16 @@
 - [ ] Docker agent for Node stages
 - [ ] Health checks after deploy
 
-**Status:** ✅ Done (Sprint 1)
-
 ---
 
-#### US-05: EC2 Deployment
+### US-05: EC2 Deployment
 **As an** operator  
 **I want** automated EC2 deployment  
 **So that** users access latest releases
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 5 | 5 | Sprint 1 |
 
 **Acceptance Criteria:**
 - [ ] Pipeline deploys via SSH
@@ -115,14 +154,16 @@
 - [ ] Public IP accessible
 - [ ] URL printed in output
 
-**Status:** ✅ Done (Sprint 1/2)
-
 ---
 
-#### US-06: Logging & Monitoring
+### US-06: Logging & Monitoring
 **As an** operator  
 **I want** structured logging  
 **So that** issues are visible
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 3 | 3 | Sprint 2 |
 
 **Acceptance Criteria:**
 - [ ] Logs include method, path, status
@@ -130,14 +171,16 @@
 - [ ] GET /metrics returns counters
 - [ ] JSON format for parsing
 
-**Status:** ✅ Done (Sprint 2)
-
 ---
 
-#### US-07: Web UI Dashboard
+### US-07: Web UI Dashboard
 **As a** user  
 **I want** a web interface  
 **So that** I can manage deployments visually
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 5 | 3 | Sprint 2 |
 
 **Acceptance Criteria:**
 - [ ] UI at root path (/)
@@ -146,14 +189,16 @@
 - [ ] Create/update forms
 - [ ] Responsive design
 
-**Status:** ✅ Done (Sprint 2)
-
 ---
 
-#### US-08: Verification Scripts
+### US-08: Verification Scripts
 **As a** developer  
 **I want** local verification  
 **So that** regressions are caught pre-push
+
+| Points | Priority | Sprint |
+|--------|----------|--------|
+| 3 | 2 | Sprint 2 |
 
 **Acceptance Criteria:**
 - [ ] `npm run verify:local` runs workflow
@@ -161,45 +206,103 @@
 - [ ] Exits non-zero on failure
 - [ ] Works in CI and local
 
-**Status:** ✅ Done (Sprint 2)
-
 ---
 
-### 1.3 Definition of Done
-
-A story is **Done** when:
+## Definition of Done
 
 1. ✅ Code committed with clear message
-2. ✅ Merged to main branch
+2. ✅ Feature branch merged to sprint branch
 3. ✅ All acceptance criteria met
 4. ✅ Tests pass (local + CI)
 5. ✅ Documentation updated
 6. ✅ Pipeline runs successfully
-7. ✅ Deployment verified
+7. ✅ Sprint branch merged to main
 
 ---
 
-### 1.4 Sprint Planning
+## Sprint Execution
 
-#### Sprint 1 (Feb 10-14)
-- **Goal:** Core API + CI/CD pipeline
-- **Capacity:** 24 SP
-- **Committed:** US-01 to US-05 (24 SP)
-- **Delivered:** 24 SP (100%)
+### Sprint 0: Planning (Feb 3-7)
 
-#### Sprint 2 (Feb 15-17)
-- **Goal:** UI + Monitoring + Polish
-- **Capacity:** 20 SP
-- **Committed:** US-06 to US-08 (11 SP)
-- **Delivered:** 11 SP (100%)
+**Goal:** Define backlog, setup environment, plan sprints
+
+**Output:**
+- Product backlog with 8 user stories
+- Acceptance criteria for all stories
+- Definition of Done established
+- Branch structure created
+- Sprint 1 planned and committed
+
+**Branch:** `sprint-0/planning`
+
+**Improvements Identified → Applied in Sprint 1:**
+- Need Docker agent for npm commands
+- Need AWS session token for ECR
+- Need health check verification
 
 ---
 
-## 2. DevOps Practice (25%)
+### Sprint 1: Core Delivery (Feb 10-14)
 
-### 2.1 CI/CD Pipeline
+**Goal:** Deliver working API with CI/CD pipeline
 
-**7-Stage Jenkins Pipeline:**
+| Story | Points | Branch |
+|-------|--------|--------|
+| US-01 | 3 | feature/us01-express-foundation |
+| US-02 | 5 | feature/us02-tests |
+| US-03 | 3 | feature/us03-dockerize-service |
+| US-04 | 8 | feature/us04-jenkins-pipeline |
+| US-05 | 5 | feature/us05-us07-delivery-hardening |
+
+**Capacity:** 24 SP  
+**Delivered:** 24 SP (100%)
+
+**Branch:** `sprint-1/execution`
+
+**Coordination:**
+- Feature branches created from sprint branch
+- Each story worked in isolation
+- Merged to sprint branch on completion
+- Sprint branch merged to main at sprint end
+
+**Improvements Applied (from Sprint 0):**
+- ✅ Added Docker agent `node:18-alpine`
+- ✅ Configured AWS session token credential
+- ✅ Integrated health check in deploy stage
+
+**Improvements Identified → Applied in Sprint 2:**
+- UI routing should be at root path
+- Public directory missing in Docker
+- Asset paths need correction
+
+---
+
+### Sprint 2: Advanced Features (Feb 15-17)
+
+**Goal:** Deliver UI, monitoring, and polish
+
+| Story | Points | Branch |
+|-------|--------|--------|
+| US-06 | 3 | feature/us06-observability |
+| US-07 | 5 | feature/us05-us07-delivery-hardening |
+| US-08 | 3 | (inline work) |
+
+**Capacity:** 20 SP  
+**Committed:** 11 SP  
+**Delivered:** 11 SP (100%)
+
+**Branch:** `sprint-2/execution`
+
+**Improvements Applied (from Sprint 1):**
+- ✅ Refactored UI to serve at root path (/)
+- ✅ Added `COPY public ./public` to Dockerfile
+- ✅ Fixed asset paths in HTML
+
+---
+
+## CI/CD Pipeline
+
+**7 Stages:**
 
 ```
 1. Checkout        → Clone repository
@@ -211,222 +314,118 @@ A story is **Done** when:
 7. Deploy          → SSH to EC2 + health check
 ```
 
-**Key Features:**
-- Docker agent: `node:18-alpine`
-- AWS session token support
-- Health check verification
-- URL output on success
+**Screenshots:**
+
+| Evidence | File |
+|----------|------|
+| Sprint 1 Success | [first_successful_build.png](first_successful_build.png) |
+| Final Pipeline | [final_pipeline.png](final_pipeline.png) |
 
 ---
 
-### 2.2 Pipeline Screenshots
-
-| Screenshot | Description |
-|------------|-------------|
-| ![First Build](first_successful_build.png) | Sprint 1 pipeline success |
-| ![Final Pipeline](final_pipeline.png) | Sprint 2 final pipeline |
-
----
-
-### 2.3 Test Integration
+## Test Evidence
 
 **10 Test Cases (100% pass):**
 
-| Test | Endpoint | Status |
-|------|----------|--------|
-| 1 | GET / (UI) | ✅ |
-| 2 | GET /health | ✅ |
-| 3 | GET /metrics | ✅ |
-| 4 | GET /api/info | ✅ |
-| 5 | GET /api/options | ✅ |
-| 6 | GET /api/deployments | ✅ |
-| 7 | POST /api/deployments | ✅ |
-| 8 | PATCH /api/deployments/:id | ✅ |
-| 9 | GET /api/dashboard | ✅ |
-| 10 | 404 handling | ✅ |
+| # | Test | Endpoint |
+|---|------|----------|
+| 1 | UI serves HTML | GET / |
+| 2 | Health check | GET /health |
+| 3 | Metrics endpoint | GET /metrics |
+| 4 | API info | GET /api/info |
+| 5 | Options endpoint | GET /api/options |
+| 6 | List deployments | GET /api/deployments |
+| 7 | Create deployment | POST /api/deployments |
+| 8 | Update status | PATCH /api/deployments/:id |
+| 9 | Dashboard | GET /api/dashboard |
+| 10 | 404 handling | GET /unknown |
 
-**Test Screenshots:**
+**Screenshots:**
 
-| Screenshot | Description |
-|------------|-------------|
-| ![Initial Tests](initial_test.png) | Sprint 1 (8 tests) |
-| ![Final Tests](final_test.png) | Sprint 2 (10 tests) |
-
----
-
-### 2.4 Monitoring
-
-- **Health:** `GET /health` → uptime, status
-- **Metrics:** `GET /metrics` → request counts
-- **Logging:** JSON format with timestamps
+| Evidence | File |
+|----------|------|
+| Sprint 1 Tests (8) | [initial_test.png](initial_test.png) |
+| Sprint 2 Tests (10) | [final_test.png](final_test.png) |
 
 ---
 
-## 3. Delivery Discipline (20%)
-
-### 3.1 Commit History
+## Commit History
 
 ```bash
 $ git rev-list --count HEAD
-65 commits (exceeds 25+ requirement)
+65 commits
 ```
 
-### 3.2 Commit Pattern
-
-**Incremental commits throughout:**
+**Pattern:** Incremental commits per feature
 
 ```
-955a914 docs(readme): update submission guide
-773ce30 refactor: remove unnecessary docs
-359aad0 fix: update asset paths
-3faaa4e fix: include public in Docker
-4453c5c feat: serve UI at root path
-03aff0d feat: ui integration
-85cafc1 feat: output app URL
-0fa6407 ci: add AWS session token
-df61340 fix: npm cache permissions
-...
+feat(api): add health check endpoint
+fix(pipeline): add Docker agent
+test(app): add 10 test cases
+docs(backlog): add user stories
+refactor(routing): serve UI at root
+ci(jenkins): add AWS session token
 ```
 
-**Commit Types:**
-- `feat:` New features
-- `fix:` Bug fixes
-- `ci:` Pipeline updates
-- `docs:` Documentation
-- `refactor:` Code cleanup
-- `test:` Test additions
+---
 
-**NOT seen:**
-- ❌ Big-bang commits
-- ❌ Bundled changes
-- ❌ Vague messages
+## Retrospectives
+
+### Sprint 1 → Sprint 2 Improvements
+
+| Challenge | Root Cause | Improvement Applied |
+|-----------|------------|---------------------|
+| npm EACCES error | Cache in root dir | Added NPM_CONFIG_CACHE |
+| Docker agent unavailable | Wrong image | Switched to node:18-alpine |
+| UI at /ui path | Initial design | Refactored to root path |
+
+### Sprint 2 Lessons
+
+| Challenge | Root Cause | Solution |
+|-----------|------------|----------|
+| CSS/JS not loading | Missing public dir | Added COPY to Dockerfile |
+| Asset 404 errors | Wrong paths in HTML | Fixed href/src paths |
+| Health check slow | Network latency | Added retry loop |
 
 ---
 
-## 4. Prototype Quality (20%)
-
-### 4.1 Working Application
-
-| Metric | Value |
-|--------|-------|
-| **URL** | http://54.74.21.91:80 |
-| **Health** | http://54.74.21.91:80/health |
-| **Status** | ✅ Running |
-| **Tests** | 10/10 passing |
-
-### 4.2 Acceptance Criteria Met
-
-All 8 user stories:
-- ✅ US-01: API Foundation
-- ✅ US-02: Automated Testing
-- ✅ US-03: Docker Container
-- ✅ US-04: Jenkins Pipeline
-- ✅ US-05: EC2 Deployment
-- ✅ US-06: Logging/Monitoring
-- ✅ US-07: Web UI Dashboard
-- ✅ US-08: Verification Scripts
-
----
-
-## 5. Reflection (10%)
-
-### 5.1 Sprint 1 Retrospective
-
-**What Went Well:**
-- Pipeline base established quickly
-- Docker Alpine efficient
-- Test-first caught issues early
-
-**Challenges:**
-- npm cache EACCES error
-- Docker agent unavailable
-
-**Improvements Applied:**
-- Added `NPM_CONFIG_CACHE` env var
-- Switched to `node:18-alpine` agent
-
----
-
-### 5.2 Sprint 2 Retrospective
-
-**What Went Well:**
-- UI integration smooth
-- Health checks reliable
-- Infrastructure scaled well
-
-**Challenges:**
-- UI routing at /ui not ideal
-- Public dir missing in Docker
-
-**Improvements Applied:**
-- Refactored to serve UI at /
-- Added `COPY public ./public`
-- Fixed asset paths in HTML
-
-**Lessons Learned:**
-- Plan asset paths early
-- Health checks prevent silent failures
-- Structured logging aids debugging
-
----
-
-## 6. Project Structure
+## Project Structure
 
 ```
 Jenkins_CI-CD/
 ├── SUBMISSION.md        ← This document
-├── Jenkinsfile          ← CI/CD (7 stages)
+├── Jenkinsfile          ← 7-stage pipeline
 ├── Dockerfile           ← Container config
-├── package.json         ← Dependencies
-├── src/
-│   ├── app.js           ← Express API (307 LOC)
-│   └── server.js        ← Server startup
-├── test/
-│   └── app.test.js      ← Jest tests (10 cases)
-├── public/
-│   ├── index.html       ← Web UI
-│   ├── app.js           ← Frontend JS
-│   └── styles.css       ← Styling
-├── docs/
-│   ├── PLANNING.md      ← Backlog details
-│   ├── SPRINT1_PLAN.md  ← Sprint 1
-│   ├── SPRINT2_PLAN.md  ← Sprint 2
-│   ├── CICD.md          ← Pipeline docs
-│   ├── TESTING.md       ← Test evidence
-│   ├── REVIEWS.md       ← Sprint reviews
-│   └── RETROSPECTIVES.md← Lessons learned
-└── infra/terraform/     ← AWS IaC
+├── src/app.js           ← Express API
+├── test/app.test.js     ← 10 Jest tests
+├── public/              ← Web UI
+└── docs/                ← Sprint artifacts
 ```
 
 ---
 
-## 7. Evidence Summary
+## Evidence Links
 
 | Artifact | Location |
 |----------|----------|
-| Product Backlog | [docs/PLANNING.md](docs/PLANNING.md) |
-| Sprint 1 Plan | [docs/SPRINT1_PLAN.md](docs/SPRINT1_PLAN.md) |
-| Sprint 2 Plan | [docs/SPRINT2_PLAN.md](docs/SPRINT2_PLAN.md) |
-| CI/CD Config | [Jenkinsfile](Jenkinsfile) |
-| Test Suite | [test/app.test.js](test/app.test.js) |
-| Pipeline Evidence | [docs/CICD.md](docs/CICD.md) |
-| Test Evidence | [docs/TESTING.md](docs/TESTING.md) |
-| Sprint Reviews | [docs/REVIEWS.md](docs/REVIEWS.md) |
+| Backlog | [docs/PLANNING.md](docs/PLANNING.md) |
+| Sprint 1 | [docs/SPRINT1_PLAN.md](docs/SPRINT1_PLAN.md) |
+| Sprint 2 | [docs/SPRINT2_PLAN.md](docs/SPRINT2_PLAN.md) |
+| Pipeline | [Jenkinsfile](Jenkinsfile) |
+| Tests | [test/app.test.js](test/app.test.js) |
+| Reviews | [docs/REVIEWS.md](docs/REVIEWS.md) |
 | Retrospectives | [docs/RETROSPECTIVES.md](docs/RETROSPECTIVES.md) |
 
 ---
 
-## 8. Final Checklist
+## Checklist
 
-- [x] Backlog with 8 prioritized stories
-- [x] Acceptance criteria for ALL stories
-- [x] Sprint plans aligned with backlog
-- [x] Definition of Done documented
-- [x] CI/CD pipeline working (7 stages)
-- [x] Tests integrated (10/10 passing)
-- [x] Health/metrics monitoring
-- [x] Incremental commits (65 total)
-- [x] Working prototype deployed
-- [x] Retrospectives with improvements
-
-**Status:** ✅ Ready for Grading
+- [x] Backlog: 8 prioritized stories
+- [x] Acceptance criteria: ALL stories
+- [x] Sprint plans: Aligned with backlog
+- [x] Branches: Feature → Sprint → Main
+- [x] Pipeline: 7 stages working
+- [x] Tests: 10/10 passing
+- [x] Commits: 65 incremental
+- [x] Prototype: Live and working
+- [x] Retrospectives: Improvements applied
