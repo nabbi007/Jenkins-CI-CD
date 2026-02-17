@@ -128,6 +128,20 @@ pipeline {
             for attempt in 1 2 3 4 5 6 7 8 9 10; do
               if curl -fsS "http://localhost:${HOST_PORT}${HEALTH_PATH}" >/dev/null 2>&1; then
                 echo "✓ Deployment verified at http://localhost:${HOST_PORT}${HEALTH_PATH}"
+                
+                # Get EC2 instance IP and display app URL
+                INSTANCE_ID=$(ec2-metadata --instance-id | cut -d " " -f 2)
+                PUBLIC_IP=$(aws ec2 describe-instances --instance-ids ${INSTANCE_ID} --region ${AWS_REGION} --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
+                PUBLIC_DNS=$(aws ec2 describe-instances --instance-ids ${INSTANCE_ID} --region ${AWS_REGION} --query 'Reservations[0].Instances[0].PublicDnsName' --output text)
+                
+                echo "=========================================="
+                echo "✓ APP DEPLOYMENT SUCCESSFUL"
+                echo "=========================================="
+                echo "App URL (IP):  http://${PUBLIC_IP}:${HOST_PORT}"
+                echo "App URL (DNS): http://${PUBLIC_DNS}:${HOST_PORT}"
+                echo "Health Check:  http://${PUBLIC_IP}:${HOST_PORT}${HEALTH_PATH}"
+                echo "=========================================="
+                
                 docker logout ${ECR_REGISTRY} 2>/dev/null || true
                 exit 0
               fi
