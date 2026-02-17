@@ -1,7 +1,9 @@
+const path = require('path');
 const express = require('express');
 
 const app = express();
 const startedAt = Date.now();
+const uiDir = path.join(__dirname, '..', 'public');
 
 const metrics = {
   totalRequests: 0,
@@ -102,6 +104,11 @@ function buildStatusSummary(records) {
   return summary;
 }
 
+function buildEnvironmentOptions(records) {
+  const environments = new Set(records.map((record) => record.environment));
+  return Array.from(environments).sort();
+}
+
 function validateDeploymentPayload(payload) {
   const requiredFields = ['serviceName', 'version', 'environment', 'owner'];
   const missingFields = requiredFields.filter((field) => {
@@ -142,6 +149,11 @@ app.use((req, res, next) => {
 
 app.use(parseJsonBody);
 
+app.get('/ui', (req, res) => {
+  res.sendFile(path.join(uiDir, 'index.html'));
+});
+app.use('/ui', express.static(uiDir));
+
 app.get('/', (req, res) => {
   res.status(200).json({
     service: 'devops-release-tracker',
@@ -151,10 +163,12 @@ app.get('/', (req, res) => {
     endpoints: [
       'GET /health',
       'GET /metrics',
+      'GET /api/options',
       'GET /api/deployments',
       'POST /api/deployments',
       'PATCH /api/deployments/:id/status',
-      'GET /api/dashboard'
+      'GET /api/dashboard',
+      'GET /ui'
     ]
   });
 });
@@ -172,6 +186,13 @@ app.get('/metrics', (req, res) => {
   res.status(200).json({
     ...metrics,
     trackedDeployments: deployments.length
+  });
+});
+
+app.get('/api/options', (req, res) => {
+  res.status(200).json({
+    statuses: Array.from(allowedDeploymentStatuses),
+    environments: buildEnvironmentOptions(deployments)
   });
 });
 

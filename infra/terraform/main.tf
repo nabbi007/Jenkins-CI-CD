@@ -82,6 +82,14 @@ resource "aws_security_group" "app" {
     cidr_blocks = [var.http_cidr]
   }
 
+  ingress {
+    description = "Jenkins"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = [var.http_cidr]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

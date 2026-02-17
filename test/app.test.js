@@ -28,6 +28,16 @@ describe('Express service', () => {
     });
   });
 
+  it('serves the web interface at GET /ui', async () => {
+    const req = createRequest({ method: 'GET', url: '/ui' });
+    const res = createResponse({ eventEmitter: EventEmitter });
+
+    await executeRequest(req, res);
+
+    expect(res.statusCode).toBe(200);
+    expect(String(res.getHeader('content-type'))).toContain('text/html');
+  });
+
   it('returns healthy status data on GET /health', async () => {
     const req = createRequest({ method: 'GET', url: '/health' });
     const res = createResponse({ eventEmitter: EventEmitter });
@@ -55,6 +65,20 @@ describe('Express service', () => {
     expect(payload).toHaveProperty('totalRequests');
     expect(payload).toHaveProperty('totalErrors');
     expect(payload).toHaveProperty('trackedDeployments');
+  });
+
+  it('returns backend options for UI on GET /api/options', async () => {
+    const req = createRequest({ method: 'GET', url: '/api/options' });
+    const res = createResponse({ eventEmitter: EventEmitter });
+
+    await executeRequest(req, res);
+
+    expect(res.statusCode).toBe(200);
+    const payload = res._getJSONData();
+    expect(payload.statuses).toEqual(
+      expect.arrayContaining(['pending', 'running', 'succeeded', 'failed', 'rolled_back'])
+    );
+    expect(payload.environments).toEqual(expect.arrayContaining(['staging']));
   });
 
   it('creates and lists deployment records', async () => {

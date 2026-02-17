@@ -1,6 +1,6 @@
 # Jenkins CI/CD Project
 
-This repository contains a two-sprint Agile + DevOps simulation centered on a real Node.js application and Jenkins-based CI/CD delivery.
+This repository contains a two-sprint Agile + DevOps  centered on a real Node.js application and Jenkins-based CI/CD delivery.
 
 ## App: DevOps Release Tracker
 
@@ -26,7 +26,4 @@ npm start
 
 ## DevOps Flow
 
-- CI/CD pipeline: `Jenkinsfile`
-- Docker image build: `Dockerfile`
-- Deploy to EC2 over SSH: `scripts/deploy-ec2.sh`
-- Local pre-merge verification: `scripts/verify-local.sh`
+ Infrastructure provisioning: `infra/terraform` (Terraform)
