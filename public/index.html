@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevOps Release Tracker</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="bg-glow bg-glow-a"></div>
+    <div class="bg-glow bg-glow-b"></div>
+
+    <main class="layout">
+      <header class="hero panel">
+        <p class="eyebrow">Operations Interface</p>
+        <h1>DevOps Release Tracker</h1>
+        <p class="lead">
+          Track deployments, monitor live service health, and move releases through status updates.
+        </p>
+      </header>
+
+      <section class="cards" aria-label="Deployment summary">
+        <article class="panel stat">
+          <p class="stat-label">Deployments</p>
+          <p class="stat-value" id="stat-deployments">0</p>
+        </article>
+        <article class="panel stat">
+          <p class="stat-label">Total Requests</p>
+          <p class="stat-value" id="stat-requests">0</p>
+        </article>
+        <article class="panel stat">
+          <p class="stat-label">Total Errors</p>
+          <p class="stat-value" id="stat-errors">0</p>
+        </article>
+      </section>
+
+      <section class="grid">
+        <article class="panel form-panel">
+          <h2>Create Deployment</h2>
+          <form id="create-form">
+            <label>
+              Service Name
+              <input name="serviceName" required placeholder="orders-api" />
+            </label>
+            <label>
+              Version
+              <input name="version" required placeholder="3.4.1" />
+            </label>
+            <label>
+              Environment
+              <input name="environment" required placeholder="production" list="environment-options" />
+            </label>
+            <datalist id="environment-options"></datalist>
+            <label>
+              Owner
+              <input name="owner" required placeholder="release-team" />
+            </label>
+            <label>
+              Notes
+              <textarea name="notes" rows="3" placeholder="Canary rollout"></textarea>
+            </label>
+            <button type="submit">Create Deployment</button>
+          </form>
+        </article>
+
+        <article class="panel form-panel">
+          <h2>Update Deployment Status</h2>
+          <form id="status-form">
+            <label>
+              Deployment ID
+              <input name="id" id="status-id" required placeholder="dep-1002" />
+            </label>
+            <label>
+              Next Status
+              <select name="status" id="status-select" required></select>
+            </label>
+            <label>
+              Notes
+              <textarea name="notes" rows="3" placeholder="Deployment passed smoke checks"></textarea>
+            </label>
+            <button type="submit">Update Status</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="table-header">
+          <h2>Recent Deployments</h2>
+          <button type="button" id="refresh-btn">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Service</th>
+                <th>Version</th>
+                <th>Environment</th>
+                <th>Status</th>
+                <th>Owner</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="deployments-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

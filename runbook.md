@@ -1,17 +1,15 @@
-# Jenkins CI/CD Runbook
+# Jenkins CI/CD Runbook (ECR + EC2)
 
 ## 1. Prerequisites
 
-- Jenkins LTS with Docker access on Jenkins agent.
-- Docker Hub (or other registry) repository created.
-- AWS EC2 (Amazon Linux 2) reachable over SSH.
+- Jenkins LTS with Docker and AWS CLI available on the Jenkins agent.
+- AWS account with ECR access.
+- EC2 (Amazon Linux 2) reachable over SSH.
 - Security group allows:
   - SSH `22` from Jenkins host
-  - App traffic `80` from your test client
+  - App traffic `80` from client/browser
 
 ## 2. Jenkins Plugins
-
-Install these plugins:
 
 - Pipeline
 - Git
@@ -23,72 +21,70 @@ Install these plugins:
 
 Create these credentials in Jenkins:
 
-1. `git_credentials` (optional): Git username/token if private repository is used.
-2. `registry_creds`: Username + password/token for Docker registry.
-3. `ec2_ssh`: SSH private key credential for EC2 deployment user.
+1. `aws_creds` (Username/Password):
+   - Username = `AWS_ACCESS_KEY_ID`
+   - Password = `AWS_SECRET_ACCESS_KEY`
+2. `ec2_ssh` (SSH private key): key used for `ec2-user` login
+3. `git_credentials` (optional): only if repo access needs auth
 
-## 4. EC2 Host Preparation
-
-Run once on EC2:
+## 4. Provision/Re-use EC2 Quickly (Terraform)
 
 ```bash
-sudo yum update -y
-sudo amazon-linux-extras install docker -y
-sudo service docker start
-sudo usermod -aG docker ec2-user
+bash scripts/ec2.sh
 ```
 
-Reconnect SSH after adding the user to docker group.
+This script:
+- runs Terraform in `infra/terraform`
+- creates/updates EC2, SG, key pair, IAM role/profile, and ECR repository
+- preserves state so repeated `apply` runs do not recreate resources unnecessarily
+- writes env output to `/tmp/jenkins-ec2.env` for deploy scripts
+
+Useful commands:
+
+```bash
+bash scripts/ec2.sh plan
+bash scripts/ec2.sh apply
+bash scripts/ec2.sh destroy
+```
+
+Important for ECR pull:
+- The Terraform module attaches `AmazonEC2ContainerRegistryReadOnly` to EC2 via instance profile.
 
 ## 5. Jenkins Job Setup
 
-1. Create a Pipeline job.
-2. Point SCM to this repository.
-3. Use `Jenkinsfile` from repository.
-4. Set parameters at build time:
-   - `EC2_HOST` = public DNS/IP
+1. Create Pipeline job
+2. SCM repo: this repository
+3. Branch: `main`
+4. Script path: `Jenkinsfile`
+5. Build parameters:
+   - `EC2_HOST`
    - `EC2_USER` = `ec2-user`
-   - `REGISTRY_REPO` = e.g. `nabbi007/jenkins-ci-cd-demo`
+   - `AWS_REGION` = `eu-west-1`
+   - `ECR_REPOSITORY` = `jenkins-ci-cd-demo`
+   - `AWS_CREDS_ID` = `aws_creds`
    - `HOST_PORT` = `80`
    - `HEALTH_PATH` = `/health`
 
-## 6. Pipeline Stage Behavior
+## 6. Pipeline Flow
 
-1. Checkout: Pull repository source.
-2. Install/Build: `npm ci`
-3. Test: `npm test`
-4. Docker Build: Build and tag image (`BUILD_NUMBER` and `latest`).
-5. Push Image: Authenticate using `registry_creds`, push both tags.
-6. Deploy: SSH via `ec2_ssh`, pull image, replace container, prune residual containers/images, and verify health endpoint.
+1. Checkout
+2. Install/Build (`npm ci`)
+3. Test (`npm test`)
+4. Resolve ECR (account/registry/repository)
+5. Docker Build
+6. Push Image to ECR
+7. Deploy to EC2 via SSH (ECR login on host + pull + run + health check)
 
-## 7. Local Verification Before Merge
-
-Run the reusable verification script locally:
-
-```bash
-npm run verify:local
-```
-
-This performs `npm ci`, test execution, Docker build, container smoke check on `/health`, and cleanup.
-
-## 8. Verification After Deploy
-
-After a successful run:
-
-1. Confirm Jenkins stage view shows all stages green.
-2. Check deployment result:
+## 7. Verification
 
 ```bash
 curl http://<EC2_PUBLIC_DNS_OR_IP>/
 curl http://<EC2_PUBLIC_DNS_OR_IP>/health
+curl http://<EC2_PUBLIC_DNS_OR_IP>/metrics
 ```
 
-3. Expected `/` response includes `service`, `version`, and `status`.
-4. Expected `/health` response includes `status`, `uptimeSeconds`, and `timestamp`.
+## 8. Failure Triage
 
-## 9. Failure Triage
-
-- Test failures: check `test/app.test.js` and app route behavior.
-- Docker build failures: validate `Dockerfile` and build context.
-- Push failures: verify `registry_creds` username/token permissions.
-- Deploy failures: verify `ec2_ssh` key, EC2 firewall, Docker service on host, and health endpoint responsiveness.
+- ECR push fails: verify `aws_creds` and IAM permissions on Jenkins side.
+- ECR pull fails on EC2: verify EC2 IAM role/credentials and AWS CLI on host.
+- SSH deploy fails: verify `ec2_ssh` key, host value, security group `22`.
