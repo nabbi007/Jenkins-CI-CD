@@ -15,8 +15,18 @@ describe('Express service', () => {
     app.resetState();
   });
 
-  it('returns metadata on GET /', async () => {
+  it('serves the web interface at GET /', async () => {
     const req = createRequest({ method: 'GET', url: '/' });
+    const res = createResponse({ eventEmitter: EventEmitter });
+
+    await executeRequest(req, res);
+
+    expect(res.statusCode).toBe(200);
+    expect(String(res.getHeader('content-type'))).toContain('text/html');
+  });
+
+  it('returns metadata on GET /api/info', async () => {
+    const req = createRequest({ method: 'GET', url: '/api/info' });
     const res = createResponse({ eventEmitter: EventEmitter });
 
     await executeRequest(req, res);
@@ -26,16 +36,6 @@ describe('Express service', () => {
       service: 'devops-release-tracker',
       status: 'ok'
     });
-  });
-
-  it('serves the web interface at GET /ui', async () => {
-    const req = createRequest({ method: 'GET', url: '/ui' });
-    const res = createResponse({ eventEmitter: EventEmitter });
-
-    await executeRequest(req, res);
-
-    expect(res.statusCode).toBe(200);
-    expect(String(res.getHeader('content-type'))).toContain('text/html');
   });
 
   it('returns healthy status data on GET /health', async () => {

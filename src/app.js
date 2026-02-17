@@ -149,26 +149,31 @@ app.use((req, res, next) => {
 
 app.use(parseJsonBody);
 
-app.get('/ui', (req, res) => {
+// Serve UI static files (CSS, JS, etc.)
+app.use(express.static(uiDir));
+
+// Serve UI HTML at root path
+app.get('/', (req, res) => {
   res.sendFile(path.join(uiDir, 'index.html'));
 });
-app.use('/ui', express.static(uiDir));
 
-app.get('/', (req, res) => {
+// API info endpoint (moved from /)
+app.get('/api/info', (req, res) => {
   res.status(200).json({
     service: 'devops-release-tracker',
     version: '2.0.0',
     status: 'ok',
     description: 'Tracks deployment records and release status for CI/CD workflows.',
     endpoints: [
+      'GET /',
       'GET /health',
       'GET /metrics',
+      'GET /api/info',
       'GET /api/options',
       'GET /api/deployments',
       'POST /api/deployments',
       'PATCH /api/deployments/:id/status',
-      'GET /api/dashboard',
-      'GET /ui'
+      'GET /api/dashboard'
     ]
   });
 });
