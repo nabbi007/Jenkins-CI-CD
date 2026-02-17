@@ -1,53 +1,48 @@
 # DevOps Release Tracker - Final Submission
 
-## Project Overview
+## 6 Required Artifacts (Mapped to Grading Rubric)
 
-This is a comprehensive Jenkins CI/CD project demonstrating a two-sprint Agile development and DevOps delivery workflow for a Node.js Express application deployed to AWS EC2.
+### 1. [📋 Backlog & Sprint Plans](docs/PLANNING.md) — Agile Practice (25%)
+- **Product Backlog:** 8 user stories with business value prioritization
+- **Definition of Done:** Clear acceptance criteria and quality gates
+- **Sprint 1 Plan:** [docs/SPRINT1_PLAN.md](docs/SPRINT1_PLAN.md)
+- **Sprint 2 Plan:** [docs/SPRINT2_PLAN.md](docs/SPRINT2_PLAN.md)
 
-**Repository:** [https://github.com/nabbi007/Jenkins-CI-CD](https://github.com/nabbi007/Jenkins-CI-CD)
+### 2. [🔄 CI/CD Evidence](docs/CICD.md) — DevOps Practice (25%)
+- **Jenkinsfile:** 7-stage pipeline with Docker agents
+- **Screenshots:** Successful builds, failed runs, deployment logs
+- **Configuration:** AWS credentials, ECR integration, health checks
 
----
+### 3. [✅ Testing Evidence](docs/TESTING.md) — DevOps Practice (25%)
+- **Test Suite:** 10 Jest test cases
+- **Pass Rate:** 100% (all tests passing)
+- **Screenshots:** Test execution logs and results
 
-## Required Artifacts Checklist
+### 4. [📊 Sprint Reviews](docs/REVIEWS.md) — Prototype Quality (20%)
+- **Sprint 1 Review:** Demos and completed work
+- **Sprint 2 Review:** Feature completion and delivery
 
-- ✅ **Backlog & Sprint Plans** - Complete product backlog with user stories, estimates, and Definition of Done
-- ✅ **Codebase** - GitHub repository with full commit history (25+ commits)
-- ✅ **CI/CD Evidence** - Jenkinsfile configuration with successful pipeline runs
-- ✅ **Testing Evidence** - Jest test suite with 10 test cases and execution logs
-- ✅ **Sprint Review Documents** - Sprint 1 and Sprint 2 reviews with demos and screenshots
-- ✅ **Retrospectives** - Lessons learned and improvements for both sprints
+### 5. [🎯 Retrospectives](docs/RETROSPECTIVES.md) — Reflection (10%)
+- **Sprint 1 Retrospective:** Lessons learned (npm issues, Docker debugging)
+- **Sprint 2 Retrospective:** Improvements (routing refactor, asset handling)
 
----
-
-## Quick Navigation
-
-1. [Backlog & Sprint Planning](docs/PLANNING.md)
-2. [Codebase Documentation](docs/CODEBASE.md)
-3. [CI/CD Pipeline Documentation](docs/CICD.md)
-4. [Testing Evidence](docs/TESTING.md)
-5. [Sprint Reviews](docs/REVIEWS.md)
-6. [Retrospectives](docs/RETROSPECTIVES.md)
-
----
-
-## Project Statistics
-
-- **Total Commits:** 25+
-- **Test Coverage:** 10 test cases (all passing)
-- **Sprint Duration:** 2 sprints (1 week each)
-- **Team Size:** 1 developer
-- **Infrastructure:** AWS EC2 (t3.micro) + ECR
-- **CI/CD Platform:** Jenkins with Docker agents
-- **App Port:** 80 (deployed) / 3000 (local)
+### 6. [💻 Codebase](https://github.com/nabbi007/Jenkins-CI-CD) — Delivery Discipline (20%)
+- **GitHub:** Full commit history (25+ incremental commits)
+- **Code Quality:** App working, all tests passing
+- **Live Demo:** http://54.74.21.91:80
 
 ---
 
-## Latest Build Status
+## Project Status
 
-**Last Successful Build:** Sprint 3 Pipeline Run  
-**App URL:** http://54.74.21.91:80  
-**Health Check:** http://54.74.21.91:80/health  
-**Test Results:** 10/10 passed ✅  
+| Metric | Status |
+|--------|--------|
+| **App Deployment** | ✅ Running (http://54.74.21.91:80) |
+| **Test Results** | ✅ 10/10 passing (100%) |
+| **Git History** | ✅ 25+ incremental commits |
+| **Backlog** | ✅ 8 user stories, fully estimated |
+| **Sprints Completed** | ✅ Sprint 1 & 2 complete |
+| **Retrospectives** | ✅ Documented for both sprints |  
 
 ---
 
