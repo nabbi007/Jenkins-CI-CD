@@ -316,10 +316,13 @@ main                          ← Production-ready code
 
 **Screenshots:**
 
-| Evidence | File |
-|----------|------|
-| Sprint 1 Success | [first_successful_build.png](first_successful_build.png) |
-| Final Pipeline | [final_pipeline.png](final_pipeline.png) |
+**Sprint 1 — First Successful Pipeline Run:**
+
+![First Successful Build](first_successful_build.png)
+
+**Sprint 2 — Final Pipeline (All 7 Stages Passing):**
+
+![Final Pipeline](final_pipeline.png)
 
 ---
 
@@ -342,10 +345,13 @@ main                          ← Production-ready code
 
 **Screenshots:**
 
-| Evidence | File |
-|----------|------|
-| Sprint 1 Tests (8) | [initial_test.png](initial_test.png) |
-| Sprint 2 Tests (10) | [final_test.png](final_test.png) |
+**Sprint 1 — Initial Test Suite (8 Tests Passing):**
+
+![Initial Tests](initial_test.png)
+
+**Sprint 2 — Final Test Suite (10 Tests Passing):**
+
+![Final Tests](final_test.png)
 
 ---
 
