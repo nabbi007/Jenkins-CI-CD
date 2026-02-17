@@ -56,7 +56,8 @@ pipeline {
 
     stage('Resolve ECR') {
       steps {
-        withCredentials([usernamePassword(credentialsId: params.AWS_CREDS_ID, usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        withCredentials([usernamePassword(credentialsId: params.AWS_CREDS_ID, usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY'),
+             string(credentialsId: 'aws_session_token', variable: 'AWS_SESSION_TOKEN')]) {
           script {
             env.AWS_REGION = params.AWS_REGION
             env.ECR_REPOSITORY = params.ECR_REPOSITORY
@@ -83,7 +84,8 @@ pipeline {
 
     stage('Push Image') {
       steps {
-        withCredentials([usernamePassword(credentialsId: params.AWS_CREDS_ID, usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        withCredentials([usernamePassword(credentialsId: params.AWS_CREDS_ID, usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY'),
+             string(credentialsId: 'aws_session_token', variable: 'AWS_SESSION_TOKEN')]) {
           sh '''
             set -e
             aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
@@ -97,7 +99,8 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        withCredentials([usernamePassword(credentialsId: params.AWS_CREDS_ID, usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        withCredentials([usernamePassword(credentialsId: params.AWS_CREDS_ID, usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY'),
+             string(credentialsId: 'aws_session_token', variable: 'AWS_SESSION_TOKEN')]) {
           sh '''
             set -e
             
