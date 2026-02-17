@@ -31,6 +31,9 @@ pipeline {
           reuseNode true
         }
       }
+      environment {
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+      }
       steps {
         sh 'npm ci'
       }
@@ -42,6 +45,9 @@ pipeline {
           image 'node:18-alpine'
           reuseNode true
         }
+      }
+      environment {
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
       }
       steps {
         sh 'npm test'
