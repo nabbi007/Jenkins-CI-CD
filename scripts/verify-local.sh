@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# US-08: Deployment Verification Automation
+# Runs complete local workflow: install → test → build → smoke → cleanup
+# Usage: npm run verify:local
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
