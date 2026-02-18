@@ -3,7 +3,6 @@
 **Project:** DevOps Release Tracker  
 **Date:** February 2026  
 **Repository:** [github.com/nabbi007/Jenkins-CI-CD](https://github.com/nabbi007/Jenkins-CI-CD)  
-**Live App:** http://54.74.21.91:80
 
 ---
 
