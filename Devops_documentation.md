@@ -285,7 +285,7 @@ main                          ← Production-ready code
 |-------|--------|--------|
 | US-06 | 3 | feature/us06-observability |
 | US-07 | 5 | feature/us05-us07-delivery-hardening |
-| US-08 | 3 | (inline work) |
+| US-08 | 3 | main (commit: `8006e19`) |
 
 **Capacity:** 20 SP  
 **Committed:** 11 SP  
@@ -359,18 +359,31 @@ main                          ← Production-ready code
 
 ```bash
 $ git rev-list --count HEAD
-65 commits
+66 commits
 ```
 
-**Pattern:** Incremental commits per feature
+**Commit-to-User Story Traceability:**
+
+| User Story | Key Commit | Message |
+|------------|------------|---------|
+| US-01 | `8556ff3` | `feat(app): scaffold express service with root endpoint` |
+| US-02 | `236a95d` | `test(us-02): add automated route tests with jest` |
+| US-03 | `0e05963` | `feat(us-03): add docker image build configuration` |
+| US-04 | `ea06d34` | `feat(us-04): add jenkins pipeline and ec2 deploy automation` |
+| US-05 | `ab5cf60` | `feat(us-05): harden ec2 deploy with health checks and cleanup` |
+| US-06 | `9d46a61` | `feat(us-06): add health endpoint, metrics, and structured logs` |
+| US-07 | `4453c5c` | `feat: serve UI at root path (/) instead of /ui` |
+| US-08 | `8006e19` | `feat(us-08): add verification script documentation header` |
+
+**Commit Pattern:** Incremental commits per feature
 
 ```
-feat(api): add health check endpoint
-fix(pipeline): add Docker agent
-test(app): add 10 test cases
-docs(backlog): add user stories
-refactor(routing): serve UI at root
-ci(jenkins): add AWS session token
+feat(us-XX): feature implementation
+test(us-XX): test additions
+fix(component): bug fixes
+docs(scope): documentation
+ci(jenkins): pipeline updates
+refactor(scope): code improvements
 ```
 
 ---
